@@ -102,6 +102,9 @@ const DiscussionApp = () => {
         ...prev,
         [selectedChannel.id]: [...(prev[selectedChannel.id] || []), mes],
       }));
+
+      // Scroll to the latest message
+      scrollToLatestMessage();
     };
 
     socket.onerror = (error) => {
@@ -143,6 +146,13 @@ const DiscussionApp = () => {
       }
     };
   }, [selectedChannel, user.user.id, scrollToLatestMessage]); // Ensure dependencies are correct
+
+  useEffect(() => {
+    if (selectedChannel) {
+      scrollToLatestMessage(); // Trigger auto-scroll on message updates
+    }
+  }, [messages, selectedChannel]); // Watch for changes in messages or channel
+
 
   const fetchChatHistory = useCallback(async () => {
     if (!selectedChannel) return;
@@ -192,8 +202,8 @@ const DiscussionApp = () => {
 
   const filteredMessages = selectedChannel
     ? (messages[selectedChannel.id] || []).filter((msg) =>
-        msg?.Content?.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      msg?.Content?.toLowerCase().includes(searchTerm.toLowerCase())
+    )
     : [];
 
   const toggleSidebar = () => {
@@ -263,11 +273,10 @@ const DiscussionApp = () => {
               <div
                 key={channel.id}
                 onClick={() => handleChannelSelect(channel)}
-                className={`flex items-center p-3 cursor-pointer rounded-lg transition-all duration-200 ${
-                  selectedChannel?.id === channel.id
-                    ? "border-black text-black border"
-                    : "hover:bg-gray-200 hover:text-black"
-                }`}
+                className={`flex items-center p-3 cursor-pointer rounded-lg transition-all duration-200 ${selectedChannel?.id === channel.id
+                  ? "border-black text-black border"
+                  : "hover:bg-gray-200 hover:text-black"
+                  }`}
               >
                 {channel.icon}
                 <div className="ml-3 flex-1">
@@ -291,9 +300,8 @@ const DiscussionApp = () => {
 
       {/* Main Content Area */}
       <div
-        className={`flex-1 flex flex-col ${
-          selectedChannel ? "block" : "hidden md:block"
-        }`}
+        className={`flex-1 flex flex-col ${selectedChannel ? "block" : "hidden md:block"
+          }`}
       >
         {selectedChannel ? (
           <div className="flex flex-col h-full">
@@ -324,9 +332,8 @@ const DiscussionApp = () => {
                 return (
                   <div
                     key={msg.id}
-                    className={`flex ${
-                      isCurrentUser ? "justify-end" : "justify-start"
-                    }`}
+                    className={`flex ${isCurrentUser ? "justify-end" : "justify-start"
+                      }`}
                   >
                     <div
                       className={`p-4 rounded-xl shadow-md hover:shadow-lg transition-shadow 
