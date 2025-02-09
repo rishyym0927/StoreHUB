@@ -2,14 +2,14 @@
   "projectName": "StoreHUB",
   "projectOwner": "rishyym0927",
   "repoType": "github",
-  "repoHost": "https://github.com",
+  "repoHost": "https://github.com/rishyym0927/StoreHUB",
   "files": [
     "README.md"
   ],
   "imageSize": 100,
   "commit": true,
-  "commitConvention": "none",
-  "contributors": [],
+  "commitConvention": "angular",
+  "contributors": ["rishyym0927","whilstsomebody"],
   "contributorsPerLine": 7,
   "linkToUsage": true
 }
