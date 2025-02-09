@@ -22,11 +22,14 @@ jobs:
       - name: Install All Contributors CLI
         run: npm install -g all-contributors-cli
 
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
       - name: Update Contributors
         run: |
           npx all-contributors add ${{ github.actor }} code
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
           git add .all-contributorsrc README.md
           git commit -m "docs: update contributors list" || echo "No changes to commit"
           git push
