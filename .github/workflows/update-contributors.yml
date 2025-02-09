@@ -1,0 +1,32 @@
+name: Update Contributors
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [closed]
+
+jobs:
+  update-contributors:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install All Contributors CLI
+        run: npm install -g all-contributors-cli
+
+      - name: Update Contributors
+        run: |
+          npx all-contributors add ${{ github.actor }} code
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add .all-contributorsrc README.md
+          git commit -m "docs: update contributors list" || echo "No changes to commit"
+          git push
