@@ -8,6 +8,10 @@ on:
   schedule:
     - cron: '0 0 * * *' # Runs daily to check for stale issues/PRs
 
+permissions:
+  issues: write
+  pull-requests: write
+
 jobs:
   notify:
     runs-on: ubuntu-latest
