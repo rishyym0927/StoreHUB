@@ -45,18 +45,6 @@ graph LR
 
 </div>
 
-## 📈 Project Growth
-
-```mermaid
-gantt
-    title Development Roadmap
-    dateFormat  YYYY-MM-DD
-    section Core Features
-    Component Library    :done,    des1, 2024-01-01, 2024-03-01
-    Authentication      :done,    des2, 2024-02-01, 2024-04-01
-    API Development     :active,  des3, 2024-03-01, 2024-05-01
-    Enterprise Features :         des4, 2024-04-01, 2024-06-01
-```
 
 ## 🛠️ Tech Stack
 
@@ -89,14 +77,6 @@ docker-compose up --build
 
 Visit `http://localhost:3000` to see the magic! 🎉
 
-## 📊 Performance Metrics
-
-```mermaid
-pie title Component Distribution
-    "React" : 45
-    "Vue" : 30
-    "Angular" : 25
-```
 
 ## 🤝 Contributing
 
