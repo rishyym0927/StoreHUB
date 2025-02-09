@@ -1,0 +1,52 @@
+name: GitHub Automation
+
+on:
+  pull_request:
+    types: [opened, closed]
+  issues:
+    types: [opened]
+  schedule:
+    - cron: '0 0 * * *' # Runs daily to check for stale issues/PRs
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment on new pull request
+        if: github.event_name == 'pull_request' && github.event.action == 'opened'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: "🚀 Thanks for your PR! Our team will review it soon. Stay tuned!"
+            });
+
+      - name: Comment on merged pull request
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: "🎉 Your PR has been merged! Thanks for contributing!"
+            });
+
+      - name: Comment on new issue
+        if: github.event_name == 'issues' && github.event.action == 'opened'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              body: "👋 Thanks for opening an issue! We’ll get back to you shortly."
+            });

@@ -40,8 +40,8 @@ graph LR
 | 🔍 Smart Search | AI-powered component discovery | ✅ Live |
 | 🤝 Collaboration | Real-time co-editing support | ✅ Live |
 | 🌐 Multi-Framework | Support for React, Vue, Angular | ✅ Live |
-| 🔒 Enterprise Security | SOC2 & GDPR compliant | 🚧 Coming Soon |
-| 📊 Analytics | Usage insights & metrics | 🚧 Coming Soon |
+| 🔒 Enterprise Security | SOC2 & GDPR compliant | 🛧 Coming Soon |
+| 📊 Analytics | Usage insights & metrics | 🛧 Coming Soon |
 
 </div>
 
@@ -52,6 +52,7 @@ graph LR
 
 ### Frontend
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
@@ -77,14 +78,28 @@ docker-compose up --build
 
 Visit `http://localhost:3000` to see the magic! 🎉
 
+## 🎨 Frontend Installation (React + Vite)
+
+```bash
+# Navigate to frontend directory
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
+
+Visit `http://localhost:5173` to access the frontend! 🌟
 
 ## 🤝 Contributing
 
 We believe in the power of community! Here's how you can contribute:
 
-1. 🍴 Fork the repository
+1. 🍔 Fork the repository
 2. 🌱 Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. 💫 Commit changes (`git commit -m 'Add AmazingFeature'`)
+3. 🌛 Commit changes (`git commit -m 'Add AmazingFeature'`)
 4. 🚀 Push to branch (`git push origin feature/AmazingFeature`)
 5. 🎉 Open a Pull Request
 
@@ -102,7 +117,7 @@ flowchart TD
     G --> H
 ```
 
-## 📄 License
+## 📝 License
 
 MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
