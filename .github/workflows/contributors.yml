@@ -1,0 +1,18 @@
+name: Contributor Recognition & Badges
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [closed]
+
+jobs:
+  update-contributors:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update Contributors List
+        uses: all-contributors/all-contributors-action@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "docs: update contributors list"

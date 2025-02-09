@@ -1,0 +1,15 @@
+name: Interactive CLI Bot for PRs & Issues
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  process-command:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for /run-tests Command
+        if: contains(github.event.comment.body, '/run-tests')
+        run: echo "Running Tests..."  # Replace with actual test command

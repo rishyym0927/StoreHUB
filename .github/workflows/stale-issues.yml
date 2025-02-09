@@ -1,0 +1,18 @@
+name: Auto-Close Stale Issues & PRs
+
+on:
+  schedule:
+    - cron: '0 12 * * 1' # Every Monday at noon
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close Stale Issues and PRs
+        uses: actions/stale@v4
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          stale-issue-message: "This issue has been marked as stale due to inactivity."
+          stale-pr-message: "This PR is stale. Please update it or it may be closed."
+          days-before-stale: 30
+          days-before-close: 7

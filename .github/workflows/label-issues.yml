@@ -1,0 +1,15 @@
+name: AI-Powered Issue Labeling
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  label-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto Label Issues with AI
+        uses: actions/labeler@v4
+        with:
+          configuration-path: .github/labeler.yml
+          repo-token: ${{ secrets.GITHUB_TOKEN }}

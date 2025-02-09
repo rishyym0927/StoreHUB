@@ -1,0 +1,28 @@
+name: README Stats Updater
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs daily at midnight
+  workflow_dispatch:
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Update GitHub Stats
+        uses: anuraghazra/github-readme-stats@latest
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          output: README.md
+
+      - name: Commit & Push Changes
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add README.md
+          git commit -m 'Updated GitHub stats in README' || echo 'No changes to commit'
+          git push
+
