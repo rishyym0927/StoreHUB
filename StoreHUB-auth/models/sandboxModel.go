@@ -2,10 +2,10 @@ package models
 
 import "gorm.io/gorm"
 
-// Post represents a user-created post
+
 type Sandbox struct {
 	gorm.Model
-	UserID      uint   `gorm:"not null"` // Foreign key for User
+	UserID      uint   `gorm:"not null"` 
 	User        User   `gorm:"foreignKey:UserID"`
 	Title       string `gorm:"not null"`
 	Description string `gorm:"not null"`

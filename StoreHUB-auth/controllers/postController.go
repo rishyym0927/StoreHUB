@@ -13,7 +13,7 @@ import (
 	"github.com/rishyym0927/StoreHUB-auth/models"
 )
 
-// Helper function to generate a cache key
+
 func generateCacheKey(prefix string, params ...string) string {
     key := prefix
     for _, param := range params {
@@ -27,10 +27,10 @@ func GetAllPosts(c *gin.Context) {
    
     cacheKey := generateCacheKey("posts")
 
-    // Try to get from cache first
+  
     cachedPosts, err := config.RDB.Get(config.Ctx, cacheKey).Result()
     if err == nil {
-        // Cache hit
+       
         var processedPosts []gin.H
         if err := json.Unmarshal([]byte(cachedPosts), &processedPosts); err == nil {
             c.JSON(http.StatusOK, gin.H{
@@ -43,10 +43,10 @@ func GetAllPosts(c *gin.Context) {
         }
     }
 
-    // Cache miss or error - fetch from database
+    
     var posts []models.Post
     
-    // Base query with preloading related data
+  
     query := initializers.DB.Preload("User").
         Preload("Likes").
         Preload("Likes.User").
@@ -65,7 +65,7 @@ func GetAllPosts(c *gin.Context) {
         return
     }
 
-    // Process posts to parse images and prepare response
+   
     processedPosts := make([]gin.H, len(posts))
     for i, post := range posts {
         var images []string
@@ -73,7 +73,7 @@ func GetAllPosts(c *gin.Context) {
             json.Unmarshal([]byte(post.Images), &images)
         }
 
-        // Process likes
+     
         likes := make([]gin.H, len(post.Likes))
         for j, like := range post.Likes {
             likes[j] = gin.H{
@@ -85,7 +85,7 @@ func GetAllPosts(c *gin.Context) {
             }
         }
 
-        // Process comments
+      
         comments := make([]gin.H, len(post.Comments))
         for j, comment := range post.Comments {
             comments[j] = gin.H{
@@ -120,7 +120,7 @@ func GetAllPosts(c *gin.Context) {
     // Cache the processed posts
     postsJSON, err := json.Marshal(processedPosts)
     if err == nil {
-        // Cache for 5 minutes
+  
         config.RDB.Set(config.Ctx, cacheKey, string(postsJSON), 5*time.Minute)
     }
 
@@ -138,7 +138,7 @@ func GetPostByID(c *gin.Context) {
     // Try to get from cache first
     cachedPost, err := config.RDB.Get(config.Ctx, cacheKey).Result()
     if err == nil {
-        // Cache hit
+        
         var postResponse gin.H
         if err := json.Unmarshal([]byte(cachedPost), &postResponse); err == nil {
             postResponse["cached"] = true
@@ -164,13 +164,13 @@ func GetPostByID(c *gin.Context) {
         return
     }
 
-    // Parse images
+ 
     var images []string
     if post.Images != "" {
         json.Unmarshal([]byte(post.Images), &images)
     }
 
-    // Process likes
+  
     likes := make([]gin.H, len(post.Likes))
     for j, like := range post.Likes {
         likes[j] = gin.H{
@@ -182,7 +182,7 @@ func GetPostByID(c *gin.Context) {
         }
     }
 
-    // Process comments
+ 
     comments := make([]gin.H, len(post.Comments))
     for j, comment := range post.Comments {
         comments[j] = gin.H{
@@ -213,10 +213,10 @@ func GetPostByID(c *gin.Context) {
         "createdAt": post.CreatedAt,
     }
 
-    // Cache the post response
+ 
     postJSON, err := json.Marshal(postResponse)
     if err == nil {
-        // Cache for 5 minutes
+   
         config.RDB.Set(config.Ctx, cacheKey, string(postJSON), 5*time.Minute)
     }
 
@@ -318,7 +318,7 @@ func DeletePost(c *gin.Context) {
         return
     }
 
-    // Invalidate cache for this specific post and clear all posts caches
+   
     config.RDB.Del(config.Ctx, 
         generateCacheKey("post", fmt.Sprintf("%v", postID)),
         generateCacheKey("posts"),
@@ -358,9 +358,7 @@ func CreatePost(c *gin.Context) {
 
     var imagesJSON []byte
     var err error
-    // In case of no image, a default "no image" image is added 
-    // to the post. This image will be removed in case the user
-    // uploads an image while updating the post.
+   
     if len(body.Images) == 0 {
         body.Images = []string{"../assets/default_image.jpg"}
     }
@@ -380,7 +378,7 @@ func CreatePost(c *gin.Context) {
         ComponentType: body.ComponentType,
     }
 
-    // Save the post to the database
+  
     result := initializers.DB.Create(&post)
     if result.Error != nil {
         c.JSON(http.StatusInternalServerError, gin.H{

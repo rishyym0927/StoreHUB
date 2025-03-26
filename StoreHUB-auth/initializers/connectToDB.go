@@ -13,7 +13,6 @@ import (
 var DB *gorm.DB
 
 func ConnectToDB() {
-	// Get the environment
 	env := os.Getenv("ENV")
 	if env == "" {
 		log.Fatal("ENV environment variable is not set")
@@ -24,12 +23,11 @@ func ConnectToDB() {
 
 	switch env {
 	case "production":
-		// Production database connection
 		dsn = os.Getenv("DB_PRODUCTION")
 		if dsn == "" {
 			log.Fatal("Production database connection string is not set")
 		}
-		// Parse the connection URL
+
 		parsedURL, err := url.Parse(dsn)
 		if err != nil {
 			log.Fatalf("Failed to parse connection string: %v", err)
@@ -40,7 +38,7 @@ func ConnectToDB() {
 		port := parsedURL.Port()
 		dbName := strings.TrimPrefix(parsedURL.Path, "/")
 
-		// SSL configuration check (new variable)
+	
 		useSSL := os.Getenv("DB_USE_SSL")
 		if useSSL == "true" {
 			log.Println("Using SSL for database connection.")
@@ -48,7 +46,7 @@ func ConnectToDB() {
 			log.Println("Warning: No SSL. Proceeding without SSL verification.")
 		}
 
-		// Construct DSN with or without SSL
+	
 		connectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 			username,
 			password,
@@ -74,12 +72,12 @@ func ConnectToDB() {
 		log.Println("Successfully connected to the database (production)")
 
 	case "staging":
-		// Staging database connection (if needed)
+
 		dsn = os.Getenv("DB_STAGING")
 		if dsn == "" {
 			log.Fatal("Staging database connection string is not set")
 		}
-		// Similar connection setup for staging
+
 		DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 		if err != nil {
 			log.Fatalf("Failed to connect to staging database: %v", err)
@@ -87,7 +85,7 @@ func ConnectToDB() {
 		log.Println("Successfully connected to the database (staging)")
 
 	case "development":
-		// Development database connection
+	
 		dsn = os.Getenv("DB_DEVELOPMENT")
 		if dsn == "" {
 			log.Fatal("Development database connection string is not set")
@@ -99,7 +97,7 @@ func ConnectToDB() {
 		log.Println("Successfully connected to the database (development)")
 
 	case "testing":
-		// Testing database connection
+
 		dsn = os.Getenv("DB_PRODUCTION")
 		if dsn == "" {
 			log.Fatal("Testing database connection string is not set")

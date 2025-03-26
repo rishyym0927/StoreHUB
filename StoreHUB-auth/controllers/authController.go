@@ -114,7 +114,7 @@ func Login(c *gin.Context) {
 	
 	c.SetSameSite(http.SameSiteNoneMode)
 	c.SetCookie("Authorization", tokenString, 3600*24*30, "", "", true, true)
-	//show me cookie
+
 	cookie, err := c.Cookie("Authorization")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get cookie"})

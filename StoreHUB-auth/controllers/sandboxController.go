@@ -16,13 +16,13 @@ func CreateSandbox(c *gin.Context) {
 		Elink       string `json:"elink" binding:"required"`
 	}
 
-	// Bind the JSON body
+	
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Get the current user from context
+	
 	user, exists := c.Get("user")
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not found"})
@@ -43,14 +43,14 @@ func CreateSandbox(c *gin.Context) {
 		Elink:       body.Elink,
 	}
 
-	// Save the Sandbox to the database
+	
 	result := initializers.DB.Create(&sandbox)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 		return
 	}
 
-	// Return the created sandbox
+	
 	c.JSON(http.StatusCreated, gin.H{"data": sandbox})
 	fmt.Printf("New sandbox created: %+v\n", sandbox)
 }
@@ -58,27 +58,27 @@ func CreateSandbox(c *gin.Context) {
 func GetAllSandboxes(c *gin.Context) {
 	var sandboxes []models.Sandbox
 
-	// Fetch all sandboxes with their associated user
+	
 	result := initializers.DB.Preload("User").Find(&sandboxes)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 		return
 	}
 
-	// Return the sandboxes in the response
+	
 	c.JSON(http.StatusOK, gin.H{"data": sandboxes})
 }
 
 func GetSandboxByID(c *gin.Context) {
 	var sandbox models.Sandbox
 
-	// Fetch the sandbox by ID with its associated user
+	
 	result := initializers.DB.Preload("User").First(&sandbox, c.Param("id"))
 	if result.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Sandbox not found"})
 		return
 	}
 
-	// Return the sandbox in the response
+
 	c.JSON(http.StatusOK, gin.H{"data": sandbox})
 }

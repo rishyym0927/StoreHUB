@@ -22,14 +22,13 @@ func CreateLike(c *gin.Context) {
         return
     }
 
-    // Check if post exists
     var post models.Post
     if err := initializers.DB.First(&post, postID).Error; err != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": "Post not found"})
         return
     }
 
-    // Check if user has already liked the post
+   
     var existingLike models.Like
     result := initializers.DB.Where("user_id = ? AND post_id = ?", currentUser.ID, postID).First(&existingLike)
     if result.Error == nil {
@@ -37,7 +36,7 @@ func CreateLike(c *gin.Context) {
         return
     }
 
-    // Create new like
+ 
     like := models.Like{
         UserID: currentUser.ID,
         PostID: post.ID,

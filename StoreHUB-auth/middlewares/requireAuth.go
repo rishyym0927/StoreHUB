@@ -63,7 +63,7 @@ func RequireAuth(c *gin.Context) {
 			return
 		}
 
-		// Set the user in the context for further use (use a pointer)
+		
 		c.Set("user", &user)
 		fmt.Printf("Setting user in context: %+v\n", user)
 		c.Next()
