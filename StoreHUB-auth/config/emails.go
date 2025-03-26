@@ -7,18 +7,15 @@ import (
 	"github.com/rishyym0927/StoreHUB-auth/models"
 )
 
-// SendWelcomeEmail sends a personalized welcome email to the user
 func SendWelcomeEmail(toEmail, firstName string) error {
-	senderEmail := os.Getenv("EMAIL")       // Use environment variable for sender email
-	senderPassword := os.Getenv("PASSWORD") // Use environment variable for sender password
-	smtpHost := "smtp.gmail.com"            // Gmail SMTP host
-	smtpPort := 587                         // Gmail SMTP port
+	senderEmail := os.Getenv("EMAIL")
+	senderPassword := os.Getenv("PASSWORD")
+	smtpHost := "smtp.gmail.com"
+	smtpPort := 587
 
-	// Debugging: Print out email credentials
 	fmt.Println("Sender Email:", senderEmail)
 	fmt.Println("Sender Password:", senderPassword)
 
-	// Create the email message
 	m := gomail.NewMessage()
 	m.SetHeader("From", senderEmail)
 	m.SetHeader("To", toEmail)
@@ -39,31 +36,27 @@ func SendWelcomeEmail(toEmail, firstName string) error {
     <p><em>The StoreHUB Team</em></p>
     `, firstName))
 
-	// Set up the SMTP dialer
 	d := gomail.NewDialer(smtpHost, smtpPort, senderEmail, senderPassword)
 
-	// Send the email
 	if err := d.DialAndSend(m); err != nil {
-		fmt.Println("Error sending email:", err) // Debugging error message
+		fmt.Println("Error sending email:", err)
 		return err
 	}
 
 	return nil
 }
 
-
 func SendPostCreationEmail(toEmail, firstName string, post models.Post) error {
-    senderEmail := os.Getenv("EMAIL")       // Use environment variable for sender email
-    senderPassword := os.Getenv("PASSWORD") // Use environment variable for sender password
-    smtpHost := "smtp.gmail.com"            // Gmail SMTP host
-    smtpPort := 587                         // Gmail SMTP port
+	senderEmail := os.Getenv("EMAIL")
+	senderPassword := os.Getenv("PASSWORD")
+	smtpHost := "smtp.gmail.com"
+	smtpPort := 587
 
-    // Create the email message
-    m := gomail.NewMessage()
-    m.SetHeader("From", senderEmail)
-    m.SetHeader("To", toEmail)
-    m.SetHeader("Subject", fmt.Sprintf("Your Post \"%s\" is Live on StoreHUB 🚀", post.Title))
-    m.SetBody("text/html", fmt.Sprintf(`
+	m := gomail.NewMessage()
+	m.SetHeader("From", senderEmail)
+	m.SetHeader("To", toEmail)
+	m.SetHeader("Subject", fmt.Sprintf("Your Post \"%s\" is Live on StoreHUB 🚀", post.Title))
+	m.SetBody("text/html", fmt.Sprintf(`
     <h1>Congratulations, %s!</h1>
     <p>Your post titled "<strong>%s</strong>" has been successfully created and is now live on StoreHUB. 🎉</p>
     <p>Here are the details of your post:</p>
@@ -81,12 +74,10 @@ func SendPostCreationEmail(toEmail, firstName string, post models.Post) error {
     <p><em>The StoreHUB Team</em></p>
     `, firstName, post.Title, post.Title, post.Description, post.Framework, post.ComponentType, post.CodeSnippet, post.Images))
 
-    // Set up the SMTP dialer
-    d := gomail.NewDialer(smtpHost, smtpPort, senderEmail, senderPassword)
+	d := gomail.NewDialer(smtpHost, smtpPort, senderEmail, senderPassword)
 
-    // Send the email
-    if err := d.DialAndSend(m); err != nil {
-        return err
-    }
-    return nil
+	if err := d.DialAndSend(m); err != nil {
+		return err
+	}
+	return nil
 }

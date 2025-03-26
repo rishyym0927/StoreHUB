@@ -3,11 +3,9 @@ package main
 import (
 	"net/http"
 	"time"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-
 	"github.com/rishyym0927/StoreHUB-auth/config"
 	"github.com/rishyym0927/StoreHUB-auth/controllers"
 	"github.com/rishyym0927/StoreHUB-auth/initializers"
@@ -16,24 +14,17 @@ import (
 )
 
 func init() {
-	// Initialize environment variables, DB connection, etc.
 	initializers.LoadEnvVariables()
 	initializers.ConnectToDB()
 	initializers.SyncDatabase()
 	config.InitRedis()
-
-	// Initialize Zap logger
 	initializers.InitLogger()
-
-	// Initialize Prometheus metrics
 	initializers.InitPrometheus()
 }
 
 func main() {
-	// Example log usage
-	initializers.SugarLogger.Info("Server is starting...")
 
-	// Gin setup
+	initializers.SugarLogger.Info("Server is starting...")
 	r := gin.Default()
 
 	// CORS middleware configuration
