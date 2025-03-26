@@ -17,26 +17,23 @@ import (
 
 func Signup(c *gin.Context) {
 	var body struct {
-		FirstName   string `json:"first_name" binding:"required"`
-		LastName    string `json:"last_name" binding:"required"`
-		Username    string `json:"username" binding:"required"`
-		Email       string `json:"email" binding:"required,email"`
-		Password    string `json:"password" binding:"required,min=8"`
+		FirstName string `json:"first_name" binding:"required"`
+		LastName  string `json:"last_name" binding:"required"`
+		Username  string `json:"username" binding:"required"`
+		Email     string `json:"email" binding:"required,email"`
+		Password  string `json:"password" binding:"required,min=8"`
 	}
 
-	
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input parameters", "details": err.Error()})
 		return
 	}
 
-	
 	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), bcrypt.DefaultCost)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
 		return
 	}
-
 
 	user := models.User{
 		FirstName:    body.FirstName,
@@ -44,21 +41,23 @@ func Signup(c *gin.Context) {
 		Username:     body.Username,
 		Email:        body.Email,
 		Password:     string(hash),
-		ProfilePhoto: "default-profile.png", 
+		ProfilePhoto: "default-profile.png",
 	}
 
 	if err := initializers.DB.Create(&user).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user", "details": err.Error()})
-		return 
+		return
 	}
 
-	if err:=config.SendWelcomeEmail(user.Email, user.FirstName); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to send welcome email"})
-        return
-	}
+	go func() {
+		if err := config.SendWelcomeEmail(user.Email, user.FirstName); err != nil {
+			fmt.Println("Warning: Failed to send welcome email:", err)
+		}
+	}()
 
 	c.JSON(http.StatusOK, gin.H{"message": "User created successfully"})
 }
+
 
 
 func Login(c *gin.Context) {
