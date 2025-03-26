@@ -42,7 +42,7 @@ const ComponentCard = (card) => {
             </span>
           </div>
           <span className="text-sm text-gray-500">
-            {/* You could add a timestamp or additional metadata here */}
+
           </span>
         </div>
       </div>

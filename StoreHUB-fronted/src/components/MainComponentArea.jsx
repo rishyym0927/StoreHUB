@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 const ComponentCard = (card) => {
   return (
     <div className="bg-white border border-black/10 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
-      {/* Image Section */}
       <div className="h-48 overflow-hidden">
         <img
           src={card.image || "/api/placeholder/400/300"}
@@ -14,9 +13,7 @@ const ComponentCard = (card) => {
         />
       </div>
 
-      {/* Content Section */}
       <div className="p-4">
-        {/* Title and Likes */}
         <div className="flex justify-between items-center mb-2">
           <h3 className="text-lg font-semibold truncate w-5/6">{card.title}</h3>
           <div className="flex items-center space-x-1">
@@ -25,7 +22,6 @@ const ComponentCard = (card) => {
           </div>
         </div>
 
-        {/* Tags and User Info */}
         <div className="flex justify-between items-center">
           <div className="flex space-x-2">
             <span className="bg-black/10 px-2 py-1 rounded text-xs truncate">

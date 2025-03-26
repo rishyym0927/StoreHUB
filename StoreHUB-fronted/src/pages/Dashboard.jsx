@@ -27,7 +27,7 @@ const Dashboard = () => {
       try {
         const response = await apiClient.get("/posts");
         console.log("Fetched posts:", response.data);
-        setPosts(response.data.posts); // Assuming backend returns 'posts' key
+        setPosts(response.data.posts); 
       } catch (error) {
         console.error("Error fetching posts:", error);
       }

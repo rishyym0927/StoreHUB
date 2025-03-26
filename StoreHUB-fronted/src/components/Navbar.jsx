@@ -8,7 +8,6 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Redirect to login if the user is not logged in
   React.useEffect(() => {
     if (!user) {
       navigate("/login");
@@ -19,7 +18,7 @@ const Navbar = () => {
     user && (
       <nav className="fixed top-0 left-0 right-0 bg-white border-b border-black/10 z-50">
         <div className="container mx-auto flex justify-between items-center p-4">
-          {/* Logo and Mobile Menu Button */}
+      
           <div className="flex items-center justify-between w-full lg:w-auto">
             <Link to="/">
               <h1 className="text-2xl font-bold text-black">StoreHUB</h1>
@@ -32,7 +31,7 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Desktop Navigation */}
+       
           <div className="hidden lg:flex items-center space-x-8 text-black">
             <Link to="/">
               <NavItem icon={<Home />} label="Explore" />
@@ -48,7 +47,7 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Desktop User and Create Button */}
+        
           <div className="hidden lg:flex items-center space-x-4">
             <Link to={"/create"}>
               <button className="text-black border-black/70 border px-4 py-2 rounded-lg flex items-center">
@@ -66,7 +65,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation Menu */}
+  
         {isMenuOpen && (
           <div className="lg:hidden flex flex-col bg-white border-t border-black/10">
             <Link

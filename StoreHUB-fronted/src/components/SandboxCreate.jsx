@@ -215,7 +215,6 @@ const SandboxCreate = () => {
         CodeSandbox Generator
       </h1>
 
-      {/* Metadata Inputs */}
       <div className="space-y-4 mb-6">
         <div>
           <label
@@ -252,7 +251,7 @@ const SandboxCreate = () => {
         </div>
       </div>
 
-      {/* Framework Selection Buttons */}
+  
       <div className="flex justify-center space-x-4 mb-6">
         {Object.entries(FRAMEWORK_CONFIGS).map(([key, config]) => (
           <button
@@ -273,7 +272,6 @@ const SandboxCreate = () => {
         ))}
       </div>
 
-      {/* Code File Inputs */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {FRAMEWORK_CONFIGS[activeFramework].files.map((file) => (
           <div key={file.name}>
@@ -298,7 +296,7 @@ const SandboxCreate = () => {
           </div>
         ))}
 
-        {/* Submit Button */}
+
         <div className="flex justify-center">
           <button
             type="submit"
@@ -316,7 +314,6 @@ const SandboxCreate = () => {
         </div>
       </form>
 
-      {/* Embedded Sandbox */}
       {embedUrl && (
         <div className="mt-8">
           <h2 className="text-2xl font-semibold mb-4 text-center">

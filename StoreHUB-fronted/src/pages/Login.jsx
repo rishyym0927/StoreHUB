@@ -25,7 +25,7 @@ const LoginPage = () => {
       [name]: value,
     }));
 
-    // Reset field-specific errors
+   
     setFormErrors((prevState) => ({
       ...prevState,
       [name]: '',
@@ -36,7 +36,7 @@ const LoginPage = () => {
     let isValid = true;
     const errors = {};
 
-    // Email validation
+    
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email) {
       errors.email = 'Email is required';
@@ -46,7 +46,7 @@ const LoginPage = () => {
       isValid = false;
     }
 
-    // Password validation
+  
     if (!formData.password) {
       errors.password = 'Password is required';
       isValid = false;
@@ -61,7 +61,7 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null); // Reset global error
+    setError(null); 
 
     if (!validateForm()) return;
 

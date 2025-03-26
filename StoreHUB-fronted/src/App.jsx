@@ -112,7 +112,7 @@ const App = () => {
             />
           </Route>
 
-          {/* Public Routes */}
+       
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/notfound" element={<NotFoundPage />} />
@@ -120,7 +120,7 @@ const App = () => {
           <Route path="/sandbox" element={<Sandbox />} />
           <Route path="/forgot" element={<ForgotPasswordPage />} />
 
-          {/* Catch-all route for undefined paths */}
+   
           <Route path="*" element={<Navigate to="/notfound" replace />} />
         </Routes>
       </Router>
