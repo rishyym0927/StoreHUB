@@ -45,7 +45,7 @@ const ComponentCard = (card) => {
 
 const MainComponentArea = ({ components }) => {
   return (
-    <div className="mt-16 p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+    <div className="mt-4 p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
       {components.map((component, idx) => (
         <Link to={`/post/${component.id}`} key={idx}>
           <ComponentCard {...component} />
