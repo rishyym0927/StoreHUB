@@ -14,11 +14,11 @@ import {
   ArrowLeft,
   Menu,
 } from "lucide-react";
-import { useAuth } from "../context/AuthContext"; // Assume this provides user details
+import { useAuth } from "../context/AuthContext";
 import apiClient from "../utils/apiClient";
 
 const DiscussionApp = () => {
-  const { user } = useAuth(); // Current user details
+  const { user } = useAuth();
   const [selectedChannel, setSelectedChannel] = useState(null);
   const [messages, setMessages] = useState({});
   const [newMessage, setNewMessage] = useState("");
@@ -26,15 +26,17 @@ const DiscussionApp = () => {
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const socketRef = useRef(null);
-  const latestMessageRef = useRef(null); // Reference for the latest message
+  const messageContainerRef = useRef(null); // Reference for the message container
 
-  // Function to scroll to the latest message
-  const scrollToLatestMessage = useCallback(() => {
-    if (latestMessageRef.current) {
-      latestMessageRef.current.scrollIntoView({ behavior: "smooth" });
+  // Updated scroll function to scroll only the container
+  const scrollToBottom = useCallback(() => {
+    if (messageContainerRef.current) {
+      const container = messageContainerRef.current;
+      container.scrollTop = container.scrollHeight;
     }
   }, []);
 
+  // Rest of the imports and initial setup remain the same...
   const channels = [
     {
       id: "react",
@@ -102,13 +104,14 @@ const DiscussionApp = () => {
         ...prev,
         [selectedChannel.id]: [...(prev[selectedChannel.id] || []), mes],
       }));
+
+      // Scroll to bottom after receiving a message
+      setTimeout(scrollToBottom, 100);
     };
 
     socket.onerror = (error) => {
       console.error("WebSocket error:", error);
-      // Implement reconnection logic
       setTimeout(() => {
-        // Attempt to reconnect
         connectWebSocket();
       }, 5000);
     };
@@ -116,9 +119,7 @@ const DiscussionApp = () => {
     socket.onclose = (event) => {
       console.log("WebSocket disconnected:", event);
       if (!event.wasClean) {
-        // Unexpected close, try to reconnect
         setTimeout(() => {
-          // Attempt to reconnect
           connectWebSocket();
         }, 5000);
       }
@@ -128,21 +129,25 @@ const DiscussionApp = () => {
   };
 
   useEffect(() => {
-    // Only reconnect if the channel has changed
     if (!selectedChannel) return;
-    scrollToLatestMessage(); // Scroll to the latest message
-
-    connectWebSocket(); // Use the defined function
+    
+    connectWebSocket();
 
     previousChannelRef.current = selectedChannel;
 
-    // Cleanup function
     return () => {
       if (socketRef.current) {
         socketRef.current.close();
       }
     };
-  }, [selectedChannel, user.user.id, scrollToLatestMessage]); // Ensure dependencies are correct
+  }, [selectedChannel, user.user.id]);
+
+  // Effect for handling initial load and message updates
+  useEffect(() => {
+    if (selectedChannel && messages[selectedChannel.id]?.length > 0) {
+      scrollToBottom();
+    }
+  }, [selectedChannel, messages, scrollToBottom]);
 
   const fetchChatHistory = useCallback(async () => {
     if (!selectedChannel) return;
@@ -162,14 +167,13 @@ const DiscussionApp = () => {
   const handleSendMessage = useCallback(() => {
     if (newMessage.trim() && selectedChannel && socketRef.current) {
       const messagePayload = {
-        Content: newMessage, // Use 'Content' instead of 'text'
+        Content: newMessage,
       };
       console.log(messagePayload, "Sending message");
 
       if (socketRef.current.readyState === WebSocket.OPEN) {
         socketRef.current.send(JSON.stringify(messagePayload));
 
-        // Optimistically update the messages state
         const localMessage = {
           id: Date.now(),
           UserID: user.user.id,
@@ -181,19 +185,19 @@ const DiscussionApp = () => {
         //   ...prev,
         //   [selectedChannel.id]: [...(prev[selectedChannel.id] || []), localMessage],
         // }));
-        scrollToLatestMessage();
 
         setNewMessage("");
+        setTimeout(scrollToBottom, 100);
       } else {
         console.error("WebSocket is not open. Unable to send message.");
       }
     }
-  }, [newMessage, selectedChannel, user.user.id]); // Updated dependency
+  }, [newMessage, selectedChannel, user.user.id, scrollToBottom]);
 
   const filteredMessages = selectedChannel
     ? (messages[selectedChannel.id] || []).filter((msg) =>
-        msg?.Content?.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      msg?.Content?.toLowerCase().includes(searchTerm.toLowerCase())
+    )
     : [];
 
   const toggleSidebar = () => {
@@ -212,9 +216,8 @@ const DiscussionApp = () => {
         <h2 className="text-xl font-bold">DevChat</h2>
         <div className="flex items-center space-x-4">
           <Bell className="cursor-pointer" />
-          {/* Open Sidebar Button */}
           <button onClick={toggleSidebar} className="focus:outline-none">
-            <Menu className="cursor-pointer bg-black " size={100} /> {/* Changed from Search to Menu icon */}
+            <Menu className="cursor-pointer bg-black " size={100} />
           </button>
         </div>
       </div>
@@ -237,7 +240,6 @@ const DiscussionApp = () => {
             <Bell className="cursor-pointer hover:text-gray-500" />
             <Settings className="cursor-pointer hover:text-gray-500" />
           </div>
-          {/* Close Sidebar Button */}
           <button onClick={toggleSidebar} className="md:hidden focus:outline-none">
             <ArrowLeft />
           </button>
@@ -317,7 +319,11 @@ const DiscussionApp = () => {
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-4 bg-gray-50 space-y-4">
+            {/* Message container with ref */}
+            <div 
+              ref={messageContainerRef}
+              className="flex-1 overflow-y-auto p-4 bg-gray-50 space-y-4"
+            >
               {filteredMessages.map((msg) => {
                 const isCurrentUser = msg.UserID === currentUserId;
 
@@ -361,7 +367,6 @@ const DiscussionApp = () => {
                   />
                   {isEmojiPickerOpen && (
                     <div className="absolute bottom-full left-0 bg-white border rounded shadow-lg p-2">
-                      {/* Emoji Picker Component or Content Goes Here */}
                       😊 😃 😂 🤔 👍
                     </div>
                   )}
