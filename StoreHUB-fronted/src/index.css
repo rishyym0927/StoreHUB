@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom dark theme */
+@layer base {
+  body {
+    @apply bg-gray-900 text-gray-100;
+  }
+}
+
 /* Hide scrollbar for Webkit browsers */
 ::-webkit-scrollbar {
     width: 0; /* Set width to 0 */
@@ -15,4 +22,34 @@
   ::-webkit-scrollbar-track {
     display: none; /* Hide scrollbar track */
   }
+
+/* Custom glassmorphism effect */
+.glass-card {
+  background: rgba(17, 24, 39, 0.8);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Custom gradient background */
+.gradient-bg {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Custom input focus effect */
+.input-focus {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+.input-focus:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.15);
+}
   
